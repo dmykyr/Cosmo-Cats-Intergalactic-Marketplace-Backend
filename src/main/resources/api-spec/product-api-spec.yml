@@ -1,0 +1,182 @@
+openapi: 3.0.0
+info:
+  title: Cosmo Cats Intergalactic Marketplace API
+  description: API for trading cosmic products in the intergalactic marketplace, featuring rare and exotic items from across the universe.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api/v1
+
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Get all cosmic products
+      description: Retrieve a list of products available in the intergalactic marketplace.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+    post:
+      tags:
+        - Products
+      summary: Add a new cosmic product
+      description: Adds a new product to the marketplace.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: Product successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid product data
+
+  /products/{id}:
+    get:
+      tags:
+        - Products
+      summary: Get product by ID
+      description: Retrieves a specific product from the marketplace using its unique identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The unique identifier for the product (UUID format).
+      responses:
+        '200':
+          description: Successfully retrieved product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+
+    put:
+      tags:
+        - Products
+      summary: Update product by ID
+      description: Updates the details of an existing product in the marketplace.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: Product successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid product data
+        '404':
+          description: Product not found
+
+    delete:
+      tags:
+        - Products
+      summary: Delete product by ID
+      description: Removes a product from the marketplace using its unique ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Product successfully deleted
+        '404':
+          description: Product not found
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "c9a647e8-57fd-4f38-a55e-bb9ac62273b5"
+        name:
+          type: string
+          example: "Cosmic Cat Plush"
+        price:
+          type: number
+          format: float
+          example: 99.99
+        description:
+          type: string
+          example: "A plush toy resembling a cosmic cat from the Nebula Cluster."
+        category:
+          type: string
+          example: "Plush Toys"
+        planetOrigin:
+          type: string
+          example: "Mars"
+        rarityLevel:
+          type: string
+          example: "Rare"
+        isInStock:
+          type: boolean
+          example: true
+
+    ProductRequest:
+      type: object
+      required:
+        - name
+        - price
+      properties:
+        name:
+          type: string
+          example: "Galactic Cat Plush"
+          minLength: 3
+          maxLength: 255
+        price:
+          type: number
+          format: float
+          minimum: 0
+          example: 49.99
+        description:
+          type: string
+          example: "A plush toy resembling a galactic cat from the Nebula Cluster."
+        category:
+          type: string
+          example: "Plush Toys"
+        planetOrigin:
+          type: string
+          example: "Saturn"
+        rarityLevel:
+          type: string
+          example: "Common"
+        isInStock:
+          type: boolean
+          example: true
