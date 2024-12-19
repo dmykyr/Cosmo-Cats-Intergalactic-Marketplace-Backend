@@ -1,6 +1,5 @@
 package com.example.cosmocatsintergalacticmarketplacebackend.dto.product;
 
-import com.example.cosmocatsintergalacticmarketplacebackend.dto.validation.ValidCategory;
 import com.example.cosmocatsintergalacticmarketplacebackend.dto.validation.ValidRarityLevel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 public class ProductRequest {
@@ -22,9 +22,8 @@ public class ProductRequest {
     @Size(max = 500, message = "Description max length is 500 characters")
     private String description;
 
-    @NotBlank(message = "Category is mandatory")
-    @ValidCategory
-    private String category;
+    @NotNull(message = "Category ID is mandatory")
+    private UUID categoryId;
 
     @Size(max = 255, message = "Planet origin name max length is 255 characters")
     private String planetOrigin;
